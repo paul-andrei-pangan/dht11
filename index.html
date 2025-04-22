@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DHT11 Sensor Table</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 950px;
+      margin-top: 60px;
+    }
+
+    h2 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+
+    .btn-glow {
+      background: #0dcaf0;
+      color: #000;
+      font-weight: 600;
+      border-radius: 30px;
+      padding: 10px 25px;
+      transition: 0.3s;
+    }
+
+    .btn-glow:hover {
+      background: #31d2f2;
+      box-shadow: 0 0 12px #0dcaf0;
+      transform: scale(1.05);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+    }
+
+    .table {
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+      color: #f8f9fa;
+    }
+
+    .table thead {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .temp {
+      color: #ffffff;
+      font-weight: bold;
+      text-shadow: 0 0 5px #ffffff;
+    }
+
+    .humidity {
+      color: #ffffff;
+      font-weight: bold;
+      text-shadow: 0 0 5px #f5f5f5;
+    }
+
+    .footer-btn {
+      margin-top: 10px;
+    }
+  </style>
+
+  <script>
+    function fetchData() {
+      fetch('all_data.php')
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('sensorData');
+          tableBody.innerHTML = "";
+
+          data.forEach(row => {
+            const newRow = `
+              <tr>
+                <td>${row.id}</td>
+                <td class="temp">${row.temperature} °C</td>
+                <td class="humidity">${row.humidity} %</td>
+                <td>${row.datetime}</td>
+              </tr>
+            `;
+            tableBody.innerHTML += newRow;
+          });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    setInterval(fetchData, 3000);
+    window.onload = fetchData;
+
+    function goToDashboard() {
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container text-center">
+    <h2>DHT11 Sensor History</h2>
+
+    <div class="card">
+      <table class="table table-bordered table-hover text-center mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>🌡 Temperature</th>
+            <th>💧 Humidity</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="sensorData">
+          <tr><td colspan="4">Loading data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-btn">
+      <button class="btn btn-glow" onclick="goToDashboard()">Back to Dashboard</button>
+    </div>
+  </div>
+</body>
+</html>
