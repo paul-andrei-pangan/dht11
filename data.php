@@ -1,7 +1,7 @@
 <?php
 $hostname = "localhost";
 $username = "u520535046_iot";
-$password = "Panganpaul09+";
+$password = "7ZyhEQ~k@";
 $database = "u520535046_iot";
 
 // Create connection
